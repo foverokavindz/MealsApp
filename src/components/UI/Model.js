@@ -19,7 +19,7 @@ const portalElement = document.getElementById('overlays');
 
 const Modal = (props) => {
   return (
-    <Fragment>
+    <>
       {ReactDOM.createPortal(
         <Backdrop onClick={props.onClick} />,
         portalElement
@@ -28,7 +28,7 @@ const Modal = (props) => {
         <ModalOverlay>{props.children}</ModalOverlay>,
         portalElement
       )}
-    </Fragment>
+    </>
   );
 };
 

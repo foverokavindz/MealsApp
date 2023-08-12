@@ -1,55 +1,67 @@
-import Model from '../UI/Model';
+import Modal from '../UI/Model';
 import classes from './Cart.module.css';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import CartContext from '../../context/cart';
 import CartItem from './CartItem';
+import Checkout from './Checkout';
 
 const Cart = (props) => {
-  const cartContext = useContext(CartContext);
+  const [isCheckout, setIsCheckout] = useState(false);
+  const cartCtx = useContext(CartContext);
 
-  const totalAmount = `$${cartContext.totalAmount.toFixed(2)}`;
-  const hasItems = cartContext.items.length > 0;
+  const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+  const hasItems = cartCtx.items.length > 0;
 
-  const handlerCartItemRemove = (id) => {
-    cartContext.removeItem(id);
+  const cartItemRemoveHandler = (id) => {
+    cartCtx.removeItem(id);
   };
-  const handlerCartItemAdd = (item) => {
-    cartContext.addItem({ ...item, amount: 1 });
+
+  const cartItemAddHandler = (item) => {
+    cartCtx.addItem(item);
+  };
+
+  const orderHandler = () => {
+    setIsCheckout(true);
   };
 
   const cartItems = (
     <ul className={classes['cart-items']}>
-      {cartContext.items.map((item) => (
+      {cartCtx.items.map((item) => (
         <CartItem
           key={item.id}
           name={item.name}
           amount={item.amount}
           price={item.price}
-          onRemove={handlerCartItemRemove.bind(null, item.id)}
-          onAdd={handlerCartItemAdd.bind(null, item)}
+          onRemove={cartItemRemoveHandler.bind(null, item.id)}
+          onAdd={cartItemAddHandler.bind(null, item)}
         />
       ))}
     </ul>
   );
 
+  const modalActions = (
+    <div className={classes.actions}>
+      <button className={classes['button--alt']} onClick={props.onShowCart}>
+        Close
+      </button>
+      {hasItems && (
+        <button className={classes.button} onClick={orderHandler}>
+          Order
+        </button>
+      )}
+    </div>
+  );
+
   return (
-    <Model onClick={props.onShowCart}>
+    <Modal onClick={props.onShowCart}>
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      <div className={classes.actions}>
-        <button className={classes['button--alt']} onClick={props.onShowCart}>
-          Close
-        </button>
-        {hasItems && (
-          <button className={classes.button} onClick={props.onShowCart}>
-            Order
-          </button>
-        )}
-      </div>
-    </Model>
+      {isCheckout && <Checkout onCancel={props.onShowCart} />}
+      {!isCheckout && modalActions}
+    </Modal>
   );
 };
 
