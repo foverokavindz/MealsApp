@@ -104,6 +104,8 @@ const defaultCartState = {
 };
 
 // Defining the cartReducer function to handle state changes for the cart
+// state is now
+// action is newly created or changed one
 const cartReducer = (state, action) => {
   // If the action type is 'ADD'
   if (action.type === 'ADD') {
