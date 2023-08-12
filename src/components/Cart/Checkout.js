@@ -39,6 +39,13 @@ const Checkout = (props) => {
     }
 
     // Submit cart data
+
+    props.onConfirm({
+      name: nameInputRef.current.value,
+      street: streetInputRef.current.value,
+      city: cityInputRef.current.value,
+      postalCode: postalCodeInputRef.current.value,
+    });
   };
 
   const nameControlClasses = `${classes.control} ${
