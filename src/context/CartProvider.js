@@ -172,6 +172,9 @@ const cartReducer = (state, action) => {
     };
   }
 
+  if (action.type === 'CLEAR') {
+    return defaultCartState;
+  }
   // If the action type doesn't match any of the defined types, return the default state
   return defaultCartState;
 };
@@ -194,12 +197,17 @@ const CartProvider = (props) => {
     dispatchCartAction({ type: 'REMOVE', id: id });
   };
 
+  const clearCartHandler = () => {
+    dispatchCartAction({ type: 'CLEAR' });
+  };
+
   // cartContext object containing the current cart state and functions
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,
     addItem: handleAddItemToCart,
     removeItem: handleRemoveItemFromCart,
+    clearCart: clearCartHandler,
   };
 
   // The CartProvider component renders the CartContext.Provider, passing cartContext as the value
